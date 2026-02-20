@@ -1,0 +1,2184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Golf Odyssey">
+<meta name="theme-color" content="#0D2137">
+<meta name="description" content="Chong Win's St Andrews Golf Trip 2026">
+
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+
+<title>St Andrews Golf Odyssey 2026</title>
+
+<style>
+/* ─── FONTS ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+/* ─── TOKENS ─────────────────────────────────────────── */
+:root {
+  --night: #0D2137;
+  --forest: #1B4332;
+  --green: #2D6A4F;
+  --sage: #74C69D;
+  --gold: #D4A017;
+  --gold-light: #F4C842;
+  --cream: #F9F3E3;
+  --warm: #F5ECD7;
+  --slate: #8899AA;
+  --mist: rgba(255,255,255,0.07);
+  --mist2: rgba(255,255,255,0.12);
+  --border: rgba(212,160,23,0.25);
+  
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  
+  --tab-h: 68px;
+  --header-h: 60px;
+}
+
+/* ─── RESET ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font-body);
+  background: var(--night);
+  color: var(--cream);
+  height: 100%;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ─── LAYOUT SHELL ──────────────────────────────────── */
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─── HEADER ─────────────────────────────────────────── */
+#header {
+  height: calc(var(--header-h) + var(--safe-top));
+  padding-top: var(--safe-top);
+  background: var(--night);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 20px;
+  padding-right: 20px;
+  flex-shrink: 0;
+  z-index: 10;
+  position: relative;
+}
+.header-logo {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+.header-logo span {
+  display: block;
+  font-size: 10px;
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--slate);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.header-flag {
+  font-size: 28px;
+  line-height: 1;
+}
+
+/* ─── PAGES ──────────────────────────────────────────── */
+#pages {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+.page {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+  pointer-events: none;
+  padding-bottom: calc(var(--tab-h) + var(--safe-bottom) + 16px);
+}
+.page.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: all;
+}
+
+/* ─── TAB BAR ────────────────────────────────────────── */
+#tabbar {
+  height: calc(var(--tab-h) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
+  background: rgba(13, 33, 55, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  flex-shrink: 0;
+  padding-top: 8px;
+  z-index: 100;
+}
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  border: none;
+  background: none;
+  color: var(--slate);
+}
+.tab-icon {
+  font-size: 22px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+.tab-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: color 0.2s ease;
+}
+.tab.active .tab-icon { transform: scale(1.15); }
+.tab.active .tab-label { color: var(--gold); }
+.tab.active { color: var(--gold); }
+
+/* ─── SHARED COMPONENTS ──────────────────────────────── */
+.section-title {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1.1;
+  letter-spacing: 0.3px;
+}
+.section-sub {
+  font-size: 12px;
+  color: var(--slate);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 4px;
+  font-weight: 500;
+}
+.gold-line {
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  margin: 16px 0;
+}
+.card {
+  background: var(--mist);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.card-header {
+  padding: 14px 16px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.card-body { padding: 0 16px 16px; }
+.badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  color: var(--gold);
+  background: rgba(212, 160, 23, 0.1);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 100px;
+  margin-top: 6px;
+}
+.pill.green { background: rgba(116,198,157,0.15); color: var(--sage); border: 1px solid rgba(116,198,157,0.3); }
+.pill.gold { background: rgba(212,160,23,0.12); color: var(--gold); border: 1px solid var(--border); }
+.pill.red { background: rgba(180,30,30,0.15); color: #F08080; border: 1px solid rgba(180,30,30,0.3); }
+.pill.blue { background: rgba(30,80,180,0.15); color: #7EB8F7; border: 1px solid rgba(30,80,180,0.3); }
+
+.tip-box {
+  background: rgba(212, 160, 23, 0.08);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 10px 10px 0;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: #E8C96A;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+.tip-box strong { color: var(--gold-light); }
+
+.info-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--mist2);
+}
+.info-row:last-child { border-bottom: none; }
+.info-row .icon { font-size: 16px; flex-shrink: 0; width: 24px; text-align: center; margin-top: 1px; }
+.info-row .text { font-size: 14px; color: var(--cream); line-height: 1.4; }
+.info-row .text strong { color: var(--gold-light); font-weight: 600; }
+
+/* ─── HOME PAGE ──────────────────────────────────────── */
+.home-hero {
+  background: linear-gradient(160deg, #0D2137 0%, #1B4332 60%, #0D2137 100%);
+  padding: 28px 20px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.home-hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(212,160,23,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.home-hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.hero-emoji {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 12px;
+  animation: floatFlag 4s ease-in-out infinite;
+}
+@keyframes floatFlag {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.0;
+  letter-spacing: 0.5px;
+}
+.hero-title .accent { color: var(--gold); }
+.hero-dates {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--sage);
+  margin-top: 6px;
+}
+.hero-tagline {
+  font-size: 13px;
+  color: var(--slate);
+  margin-top: 12px;
+  font-style: italic;
+  line-height: 1.4;
+}
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  margin: 0;
+  border-bottom: 1px solid var(--border);
+}
+.stat-cell {
+  background: var(--night);
+  padding: 14px 8px;
+  text-align: center;
+}
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+.stat-lbl {
+  font-size: 9px;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 3px;
+  font-weight: 500;
+}
+
+/* Countdown */
+.countdown-card {
+  margin: 16px 16px 0;
+  background: linear-gradient(135deg, var(--forest), #0d2137);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.countdown-label {
+  font-size: 12px;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 4px;
+}
+.countdown-days {
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+.countdown-sub { font-size: 12px; color: var(--sage); margin-top: 2px; }
+.countdown-icon { font-size: 44px; opacity: 0.8; }
+
+/* Quick nav grid */
+.quick-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 16px;
+}
+.qnav-btn {
+  background: var(--mist);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  text-align: left;
+}
+.qnav-btn:active { transform: scale(0.97); background: var(--mist2); }
+.qnav-icon { font-size: 26px; }
+.qnav-text { font-size: 13px; font-weight: 600; color: var(--cream); line-height: 1.3; }
+.qnav-text small { display: block; font-size: 11px; color: var(--slate); font-weight: 400; margin-top: 1px; }
+
+/* Squad row */
+.squad-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  gap: 12px;
+  border-bottom: 1px solid var(--mist);
+}
+.squad-row:last-child { border-bottom: none; }
+.squad-avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.squad-name { font-size: 15px; font-weight: 600; color: var(--cream); }
+.squad-role { font-size: 12px; color: var(--slate); margin-top: 1px; }
+.squad-flight { font-family: var(--font-mono); font-size: 10px; color: var(--sage); margin-left: auto; text-align: right; flex-shrink: 0; }
+
+/* ─── ITINERARY PAGE ─────────────────────────────────── */
+.day-strip {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 14px 16px;
+  gap: 8px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  background: var(--night);
+  z-index: 5;
+}
+.day-strip::-webkit-scrollbar { display: none; }
+.day-chip {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  padding: 8px 14px;
+  border-radius: 100px;
+  border: 1px solid var(--mist2);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  color: var(--slate);
+  background: transparent;
+}
+.day-chip.active {
+  background: var(--gold);
+  color: var(--night);
+  border-color: var(--gold);
+  font-weight: 700;
+}
+.day-chip .chip-date { display: block; font-size: 10px; font-weight: 400; opacity: 0.75; }
+
+.day-section {
+  display: none;
+  padding: 0 16px;
+}
+.day-section.visible { display: block; }
+
+.day-hero {
+  padding: 20px 0 12px;
+}
+.day-hero-date {
+  font-size: 11px;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 500;
+}
+.day-hero-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--cream);
+  margin-top: 4px;
+  line-height: 1.15;
+}
+.day-hero-emoji { font-size: 36px; float: right; margin-top: -8px; }
+
+/* Timeline */
+.timeline { position: relative; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 17px; top: 8px; bottom: 8px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--gold), rgba(212,160,23,0.2));
+}
+.tl-item {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 16px;
+  position: relative;
+}
+.tl-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 2px solid var(--night);
+  box-shadow: 0 0 0 2px var(--gold);
+  flex-shrink: 0;
+  margin-top: 4px;
+  z-index: 1;
+}
+.tl-dot.hollow {
+  background: var(--night);
+  box-shadow: 0 0 0 2px var(--sage);
+}
+.tl-content { flex: 1; padding-bottom: 4px; }
+.tl-time {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gold);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+.tl-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--cream);
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+.tl-desc {
+  font-size: 13px;
+  color: var(--slate);
+  line-height: 1.5;
+}
+.tl-desc strong { color: var(--cream); }
+
+/* ─── COURSES PAGE ───────────────────────────────────── */
+.course-card-big {
+  background: var(--mist);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.course-top {
+  padding: 16px 16px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.course-num {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 700;
+  color: rgba(212,160,23,0.15);
+  line-height: 1;
+  position: absolute;
+  right: 16px;
+  top: 8px;
+}
+.course-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.2;
+}
+.course-title.legendary { color: var(--gold); }
+.course-meta {
+  font-size: 11px;
+  color: var(--slate);
+  margin-top: 4px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.course-body {
+  padding: 0 16px 16px;
+  font-size: 13px;
+  color: #AABCCC;
+  line-height: 1.6;
+}
+.course-footer {
+  padding: 10px 16px;
+  background: rgba(0,0,0,0.2);
+  border-top: 1px solid var(--mist);
+  font-size: 12px;
+  color: var(--sage);
+  font-style: italic;
+}
+.tee-chip {
+  background: var(--forest);
+  border: 1px solid rgba(116,198,157,0.4);
+  color: var(--sage);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.course-card-big.legendary {
+  border-color: rgba(212,160,23,0.5);
+  background: linear-gradient(160deg, rgba(212,160,23,0.08), var(--mist));
+}
+
+/* ─── MAP / GUIDE PAGE ───────────────────────────────── */
+.section-block {
+  padding: 16px;
+}
+.section-block + .section-block {
+  padding-top: 0;
+}
+
+.route-step {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 0;
+  position: relative;
+}
+.route-steps { position: relative; }
+.route-steps::before {
+  content: '';
+  position: absolute;
+  left: 15px; top: 24px; bottom: 24px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--gold), var(--sage));
+}
+.route-num {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--night);
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  z-index: 1;
+  margin-top: 2px;
+}
+.route-content {
+  padding-bottom: 20px;
+  flex: 1;
+}
+.route-title { font-size: 15px; font-weight: 600; color: var(--cream); }
+.route-time { font-family: var(--font-mono); font-size: 11px; color: var(--gold); margin-top: 2px; }
+.route-desc { font-size: 13px; color: var(--slate); margin-top: 4px; line-height: 1.4; }
+
+/* Whisky cards */
+.whisky-item {
+  background: var(--mist);
+  border: 1px solid rgba(139,69,19,0.4);
+  border-left: 4px solid #8B4513;
+  border-radius: 0 12px 12px 0;
+  padding: 14px 14px 14px 16px;
+  margin-bottom: 10px;
+}
+.whisky-name { font-family: var(--font-display); font-size: 18px; color: #E8B96A; font-weight: 600; }
+.whisky-loc { font-size: 11px; color: var(--slate); margin-top: 2px; font-style: italic; }
+.whisky-desc { font-size: 13px; color: #AABCCC; margin-top: 8px; line-height: 1.5; }
+.whisky-tip { font-size: 12px; color: #CD853F; margin-top: 8px; font-style: italic; }
+
+/* Tips grid */
+.tips-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.tip-card {
+  background: var(--mist);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+}
+.tip-card-icon { font-size: 22px; margin-bottom: 8px; display: block; }
+.tip-card-title { font-size: 12px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.tip-card ul { list-style: none; }
+.tip-card ul li { font-size: 12px; color: var(--slate); padding: 3px 0; line-height: 1.4; }
+.tip-card ul li::before { content: '› '; color: var(--sage); }
+
+/* ─── HOTELS/DINING PAGE ─────────────────────────────── */
+.restaurant-item {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--mist);
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.restaurant-item:last-child { border-bottom: none; }
+.rest-emoji { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+.rest-info { flex: 1; }
+.rest-name { font-size: 15px; font-weight: 600; color: var(--cream); }
+.rest-type { font-size: 11px; color: var(--gold); font-weight: 500; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+.rest-desc { font-size: 12.5px; color: var(--slate); margin-top: 4px; line-height: 1.4; }
+.rest-price { font-family: var(--font-mono); font-size: 12px; color: var(--sage); white-space: nowrap; margin-top: 4px; }
+
+.tab-switcher {
+  display: flex;
+  padding: 12px 16px 0;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tab-switcher::-webkit-scrollbar { display: none; }
+.tsw-btn {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--mist2);
+  color: var(--slate);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.tsw-btn.active {
+  background: var(--forest);
+  color: var(--sage);
+  border-color: rgba(116,198,157,0.4);
+}
+
+.dining-section { display: none; }
+.dining-section.visible { display: block; }
+
+/* Perks page */
+.perk-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--mist);
+}
+.perk-item:last-child { border-bottom: none; }
+.perk-check {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  margin-top: 1px;
+}
+.perk-check.gold { background: rgba(212,160,23,0.15); color: var(--gold); }
+.perk-check.blue { background: rgba(30,80,180,0.15); color: #7EB8F7; }
+.perk-title { font-size: 14px; font-weight: 600; color: var(--cream); }
+.perk-desc { font-size: 12.5px; color: var(--slate); margin-top: 2px; line-height: 1.4; }
+
+/* ─── SCROLL HELPERS ─────────────────────────────────── */
+.page-inner { padding: 0 0 8px; }
+.px { padding-left: 16px; padding-right: 16px; }
+.pt { padding-top: 16px; }
+.pb { padding-bottom: 16px; }
+
+/* ─── ANIMATIONS ─────────────────────────────────────── */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-in {
+  animation: slideUp 0.4s ease both;
+}
+.animate-in:nth-child(2) { animation-delay: 0.05s; }
+.animate-in:nth-child(3) { animation-delay: 0.10s; }
+.animate-in:nth-child(4) { animation-delay: 0.15s; }
+.animate-in:nth-child(5) { animation-delay: 0.20s; }
+.animate-in:nth-child(6) { animation-delay: 0.25s; }
+
+/* ─── RETURN JOURNEY CRITICAL ────────────────────────── */
+.critical-banner {
+  background: linear-gradient(135deg, rgba(180,30,30,0.2), rgba(180,30,30,0.08));
+  border: 1px solid rgba(240,128,128,0.4);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.critical-banner .cb-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #F08080;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.critical-banner p {
+  font-size: 13px;
+  color: #FFAAAA;
+  line-height: 1.5;
+}
+
+/* Segment divider */
+.seg-divider {
+  padding: 20px 16px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sage);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.seg-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--mist2);
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- HEADER -->
+  <div id="header">
+    <div class="header-logo">
+      Golf Odyssey
+      <span>St Andrews 2026</span>
+    </div>
+    <div class="header-flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</div>
+  </div>
+
+  <!-- PAGES -->
+  <div id="pages">
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- PAGE: HOME                                       -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="page active" id="page-home">
+      <div class="page-inner">
+        
+        <div class="home-hero">
+          <span class="hero-emoji">⛳</span>
+          <div class="hero-title">The <span class="accent">Grand</span><br>St Andrews</div>
+          <div class="hero-dates">17 – 26 July 2026</div>
+          <div class="hero-tagline">"Och aye, Chong Win! The Home of Golf awaits, ya legend!" 🏌️</div>
+        </div>
+        
+        <div class="stats-strip">
+          <div class="stat-cell"><div class="stat-num">8</div><div class="stat-lbl">Golfers</div></div>
+          <div class="stat-cell"><div class="stat-num">6</div><div class="stat-lbl">Courses</div></div>
+          <div class="stat-cell"><div class="stat-num">10</div><div class="stat-lbl">Days</div></div>
+          <div class="stat-cell"><div class="stat-num">∞</div><div class="stat-lbl">Drams</div></div>
+        </div>
+
+        <div class="countdown-card animate-in">
+          <div>
+            <div class="countdown-label">Tee Off In</div>
+            <div class="countdown-days" id="countdown-num">—</div>
+            <div class="countdown-sub" id="countdown-sub">days to departure</div>
+          </div>
+          <div class="countdown-icon">🏌️</div>
+        </div>
+
+        <div class="quick-nav animate-in">
+          <div class="qnav-btn" onclick="switchPage('itinerary')">
+            <div class="qnav-icon">📅</div>
+            <div class="qnav-text">Day-by-Day<small>Full itinerary</small></div>
+          </div>
+          <div class="qnav-btn" onclick="switchPage('courses')">
+            <div class="qnav-icon">⛳</div>
+            <div class="qnav-text">Golf Courses<small>All 6 courses</small></div>
+          </div>
+          <div class="qnav-btn" onclick="switchPage('guide')">
+            <div class="qnav-icon">🗺️</div>
+            <div class="qnav-text">Drive Route<small>MAN → EDI → STA</small></div>
+          </div>
+          <div class="qnav-btn" onclick="switchPage('dining')">
+            <div class="qnav-icon">🍷</div>
+            <div class="qnav-text">Food & Bars<small>Best of Scotland</small></div>
+          </div>
+        </div>
+
+        <div class="seg-divider">The Magnificent Eight</div>
+        
+        <div class="card px animate-in">
+          <div class="squad-row">
+            <div class="squad-avatar" style="background:rgba(212,160,23,0.15);">👑</div>
+            <div><div class="squad-name">Chong Win</div><div class="squad-role">The Boss · Trip Captain</div></div>
+            <div class="squad-flight">SQ302<br>17 Jul</div>
+          </div>
+          <div class="squad-row">
+            <div class="squad-avatar" style="background:rgba(116,198,157,0.15);">🎯</div>
+            <div><div class="squad-name">Kwee San</div><div class="squad-role">Co-Pilot</div></div>
+            <div class="squad-flight">SQ302<br>17 Jul</div>
+          </div>
+          <div class="squad-row">
+            <div class="squad-avatar" style="background:rgba(100,150,220,0.15);">🃏</div>
+            <div><div class="squad-name">Bryan</div><div class="squad-role">The Wild Card</div></div>
+            <div class="squad-flight">Separate</div>
+          </div>
+          <div class="squad-row">
+            <div class="squad-avatar" style="background:rgba(150,100,220,0.15);">🔍</div>
+            <div><div class="squad-name">Desmond</div><div class="squad-role">The Scout (early)</div></div>
+            <div class="squad-flight">Separate</div>
+          </div>
+          <div class="squad-row">
+            <div class="squad-avatar" style="background:rgba(220,100,150,0.15);">🌸</div>
+            <div><div class="squad-name">Karen</div><div class="squad-role">Desmond's +1</div></div>
+            <div class="squad-flight">Separate</div>
+          </div>
+          <div class="squad-row">
+            <div class="squad-avatar" style="background:rgba(100,200,150,0.15);">⚡</div>
+            <div><div class="squad-name">Aaron</div><div class="squad-role">The Maverick</div></div>
+            <div class="squad-flight">Separate</div>
+          </div>
+          <div class="squad-row">
+            <div class="squad-avatar" style="background:rgba(200,160,100,0.15);">💎</div>
+            <div><div class="squad-name">Crystal</div><div class="squad-role">Aaron's +1</div></div>
+            <div class="squad-flight">Separate</div>
+          </div>
+          <div class="squad-row">
+            <div class="squad-avatar" style="background:rgba(160,100,200,0.15);">🌟</div>
+            <div><div class="squad-name">Ishay</div><div class="squad-role">Wildcard #2</div></div>
+            <div class="squad-flight">Separate</div>
+          </div>
+        </div>
+
+        <div class="px pb" style="padding-top:12px;">
+          <div class="tip-box">
+            <strong>⚠️ Return flight:</strong> SQ301 departs Manchester 10:35am on <strong>Sat 26 July</strong>. Be at MAN airport by 7:30am. Plan to drive from St Andrews Friday evening after Dunbarnie!
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- PAGE: ITINERARY                                  -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="page" id="page-itinerary">
+      <div class="page-inner">
+        
+        <!-- Day chips sticky bar -->
+        <div class="day-strip" id="day-strip">
+          <div class="day-chip active" data-day="0" onclick="switchDay(0)">17 Jul<span class="chip-date">Departure</span></div>
+          <div class="day-chip" data-day="1" onclick="switchDay(1)">17–18 Jul<span class="chip-date">Edinburgh</span></div>
+          <div class="day-chip" data-day="2" onclick="switchDay(2)">18–19 Jul<span class="chip-date">Explore</span></div>
+          <div class="day-chip" data-day="3" onclick="switchDay(3)">19 Jul<span class="chip-date">St Andrews</span></div>
+          <div class="day-chip" data-day="4" onclick="switchDay(4)">20 Jul<span class="chip-date">Kingsbarns</span></div>
+          <div class="day-chip" data-day="5" onclick="switchDay(5)">21 Jul<span class="chip-date">Castle</span></div>
+          <div class="day-chip" data-day="6" onclick="switchDay(6)">22 Jul<span class="chip-date">OLD COURSE</span></div>
+          <div class="day-chip" data-day="7" onclick="switchDay(7)">23 Jul<span class="chip-date">Carnoustie</span></div>
+          <div class="day-chip" data-day="8" onclick="switchDay(8)">24 Jul<span class="chip-date">Dunbarnie</span></div>
+          <div class="day-chip" data-day="9" onclick="switchDay(9)">25–26 Jul<span class="chip-date">Fly Home</span></div>
+        </div>
+
+        <!-- DAY 0: Departure -->
+        <div class="day-section visible px" id="day-0">
+          <div class="day-hero">
+            <div class="day-hero-date">Friday, 17 July 2026</div>
+            <div class="day-hero-title"><span style="float:right;font-size:36px">✈️</span>Departure Day</div>
+          </div>
+          <div class="gold-line"></div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">00:00 — Be at Changi by midnight!</div>
+                <div class="tl-title">Singapore Changi Airport — Terminal 3</div>
+                <div class="tl-desc">Check-in for SQ302. Recommended 2.5 hrs before departure. Check golf bags in as oversized — confirm airline golf bag policy.</div>
+                <div class="tip-box">💡 Pack spare golf gloves, tees, and your scorecard in hand luggage — just in case!  </div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">02:10am</div>
+                <div class="tl-title">✈️ SQ302 Departs Singapore</div>
+                <div class="tl-desc">Singapore Airlines to Manchester. ~13 hrs flight. Settle in, sleep well — you'll want energy for the drive north!</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">09:15am (UK time, UTC+1)</div>
+                <div class="tl-title">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Arrive Manchester Airport T2</div>
+                <div class="tl-desc">Clear UK Border Force immigration (allow 45–60 min). Collect 3 large bags + 3 golf bags from oversized carousel.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">~11:00am</div>
+                <div class="tl-title">🚗 Pick Up Rental Car</div>
+                <div class="tl-desc"><strong>Book in advance:</strong> Large 7-seat MPV (Ford Galaxy / VW Touran / Kia Carnival). Need room for 3 pax + 3 big bags + 3 golf bags. Hertz, Avis, Enterprise all at T2.</div>
+                <div class="tip-box">🇬🇧 Drive on the LEFT! Speed: 70mph motorway, 30mph in towns. Speed cameras everywhere.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">~11:30am</div>
+                <div class="tl-title">⛽ Fuel Up — Head North on M6</div>
+                <div class="tl-desc">Join M6 northbound. First stop: <strong>Tebay Services</strong> — the UK's best motorway services. Real farm food, award-winning pies, Lake District produce.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">~2:30pm</div>
+                <div class="tl-title">☕ Lunch at Tebay Farm Services</div>
+                <div class="tl-desc">Cumbrian beef burgers, homemade pies, local cheeses. Surrounded by stunning Lake District hills. Don't miss the farm shop!</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">~3:30pm</div>
+                <div class="tl-title">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Cross Into Scotland — Gretna Green!</div>
+                <div class="tl-desc">Scotland border at River Sark! Quick stop at the famous Blacksmith's Shop for a photo at the anvil. Fun fact: Gretna was famous for runaway marriages since 1754!</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">~5:30pm</div>
+                <div class="tl-title">🏨 Check In — Edinburgh</div>
+                <div class="tl-desc"><strong>Recommended: The Glasshouse, Autograph Collection (Marriott ★★★★★)</strong> — 2 Greenside Place. 160+ whiskies at Snug Bar. Calton Hill views. Titanium Elite perks apply!<br><br>Desmond &amp; Karen: <strong>InterContinental Edinburgh The George</strong> — 19-21 George Street (since 1775!).</div>
+                <div class="tip-box">💳 Amex FHR: Complimentary breakfast for 2, £100 property credit, room upgrade on arrival!</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot hollow"></div>
+              <div class="tl-content">
+                <div class="tl-time">~8:00pm</div>
+                <div class="tl-title">🍷 Dinner — First Night in Scotland!</div>
+                <div class="tl-desc"><strong>The Witchery by the Castle</strong> — Gothic grandeur near Edinburgh Castle. Wild game, Scottish produce, dramatic candlelit setting.<br>Alt: <strong>The Spence</strong> (Gleneagles Townhouse) — Victorian splendour, Michelin cocktail award.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DAY 1: Edinburgh Arrive -->
+        <div class="day-section px" id="day-1">
+          <div class="day-hero">
+            <div class="day-hero-date">17–18 July 2026</div>
+            <div class="day-hero-title"><span style="float:right;font-size:36px">🏰</span>Arrive Edinburgh</div>
+          </div>
+          <div class="gold-line"></div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">After Dinner</div>
+                <div class="tl-title">🥃 The Glasshouse Snug Bar</div>
+                <div class="tl-desc">160+ exclusive single malts at the hotel bar. Suites named after whisky regions. The perfect way to end your first night in Scotland — the drams come to you!</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">Saturday Morning</div>
+                <div class="tl-title">🌅 Calton Hill at Sunrise</div>
+                <div class="tl-desc">5-min walk from The Glasshouse. Free! Best panoramic view of Edinburgh. The city skyline with the Castle in the background — breathtaking in morning light.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DAY 2: Edinburgh Explore -->
+        <div class="day-section px" id="day-2">
+          <div class="day-hero">
+            <div class="day-hero-date">Saturday–Sunday, 18–19 July</div>
+            <div class="day-hero-title"><span style="float:right;font-size:36px">🏰</span>Explore Edinburgh</div>
+          </div>
+          <div class="gold-line"></div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">Morning</div>
+                <div class="tl-title">🏰 Edinburgh Castle</div>
+                <div class="tl-desc">Pre-book tickets! Scottish Crown Jewels, the Stone of Destiny, panoramic city views. Allow 2–3 hrs. One of the most visited castles in Europe.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">Midday</div>
+                <div class="tl-title">👑 Royal Mile Walk</div>
+                <div class="tl-desc">Walk from the Castle down to the Palace of Holyroodhouse. Closes, closes, closes. History on every cobblestone. Victoria Street (rumoured inspiration for Diagon Alley!) is a must detour.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">Afternoon</div>
+                <div class="tl-title">🥃 Whisky Experience</div>
+                <div class="tl-desc"><strong>Johnnie Walker Princes Street</strong> — immersive multi-floor experience, 3 personalised cocktails, rooftop bar views. Book in advance! £35pp.<br>Or: <strong>Scotch Whisky Experience</strong> (Royal Mile) — world's largest collection, from £16pp.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">Evening</div>
+                <div class="tl-title">🌿 Dean Village &amp; Water of Leith</div>
+                <div class="tl-desc">Hidden gem — 19th-century mill village 10 min from centre. Picturesque evening stroll along the river. Perfect before dinner.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot hollow"></div>
+              <div class="tl-content">
+                <div class="tl-time">Dinner Options</div>
+                <div class="tl-title">🍽️ Edinburgh Dining</div>
+                <div class="tl-desc"><strong>Ondine</strong> — Scottish seafood, langoustines, oysters<br><strong>Noto</strong> — Asian-Scottish fusion, Michelin Bib Gourmand<br><strong>Baba</strong> — Levantine mezze, great for groups<br><strong>The Dome</strong> — Grand Victorian dining hall</div>
+              </div>
+            </div>
+          </div>
+          <div class="tip-box" style="margin-top:4px; margin-bottom:16px;">
+            ⏰ <strong>Depart Edinburgh by 10:30–11:00am Sunday 19 July</strong> to reach Old Course Hotel in time for check-in and the Links Golf Lesson. Drive is ~1 hour via A91.
+          </div>
+        </div>
+
+        <!-- DAY 3: Arrive St Andrews -->
+        <div class="day-section px" id="day-3">
+          <div class="day-hero">
+            <div class="day-hero-date">Sunday, 19 July 2026</div>
+            <div class="day-hero-title"><span style="float:right;font-size:36px">⛳</span>Arrive St Andrews</div>
+          </div>
+          <div class="gold-line"></div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">10:30–11:00am</div>
+                <div class="tl-title">🚗 Drive Edinburgh → St Andrews</div>
+                <div class="tl-desc">A91 through the Kingdom of Fife. ~1 hour. Optional scenic detour via <strong>Falkland Palace</strong> — stunning Renaissance palace, Mary Queen of Scots' favourite residence.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">~1:00pm</div>
+                <div class="tl-title">🏨 Check In — Old Course Hotel</div>
+                <div class="tl-desc">The iconic hotel beside the 17th Road Hole! Request a room overlooking the links. Store golf bags safely. Swilcan Bridge is 3 minutes' walk. The moment is real!</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">Afternoon</div>
+                <div class="tl-title">⛳ Links Golf Lesson</div>
+                <div class="tl-desc">Your introduction to true links golf! Learn the bump-and-run, playing the wind, reading seaside lies. This lesson pays dividends all week.</div>
+                <div class="tip-box">💡 Links tip: "Drive for show, bump-and-run for dough!" The ball rolls further on firm links turf. Learn to let the ground work for you.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">~6:00pm</div>
+                <div class="tl-title">🌅 Walk to the Swilcan Bridge</div>
+                <div class="tl-desc">Mandatory group photo at the most iconic bridge in golf. Nicklaus, Faldo, Woods have all walked this. Take your time. Soak it in. Golden hour light is spectacular.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot hollow"></div>
+              <div class="tl-content">
+                <div class="tl-time">7:30pm</div>
+                <div class="tl-title">🍷 Dinner — Tom Morris Bar &amp; Grill</div>
+                <div class="tl-desc">Links Clubhouse — views over the 18th fairway. Named after the legend himself. Great Scottish menu, excellent whisky list. The perfect welcome-to-St-Andrews dinner!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DAY 4: Kingsbarns -->
+        <div class="day-section px" id="day-4">
+          <div class="day-hero">
+            <div class="day-hero-date">Monday, 20 July 2026</div>
+            <div class="day-hero-title"><span style="float:right;font-size:36px">🌊</span>Kingsbarns Golf Links</div>
+          </div>
+          <div class="pill gold" style="margin-bottom:16px;">TEE OFF: 10:50am</div>
+          <div class="gold-line"></div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">Morning</div>
+                <div class="tl-title">🏨 Breakfast at Old Course Hotel</div>
+                <div class="tl-desc">Road Hole Restaurant breakfast with views over the 17th hole. Fuel up — it's a big day!</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">10:20am — Drive 20 min</div>
+                <div class="tl-title">🚗 Head to Kingsbarns</div>
+                <div class="tl-desc">East Newhall Farm, Kingsbarns, Fife. Arrive 30 min before tee time. Visit the pro shop — the Kingsbarns merchandise is excellent.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">10:50am — ~3:30pm</div>
+                <div class="tl-title">⛳ Play Kingsbarns Golf Links</div>
+                <div class="tl-desc">World Top 100. Every hole has views of the North Sea. Dramatic clifftop fairways. Spectacular par-3 3rd and clifftop par-5 12th. One of Scotland's most breathtaking rounds.</div>
+                <div class="tip-box">⛳ Take one extra club — the wind off the North Sea amplifies the exposed clifftop holes.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">~4:00pm</div>
+                <div class="tl-title">🥃 Kingsbarns Distillery Visit</div>
+                <div class="tl-desc">5 min from the course! Award-winning single malt Scotch in a stunning Georgian farmstead. Tour + 3 tastings £25pp. Also Darnley's Gin Cottage next door. Pre-book!</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot hollow"></div>
+              <div class="tl-content">
+                <div class="tl-time">Evening</div>
+                <div class="tl-title">🍽️ Dinner Options</div>
+                <div class="tl-desc"><strong>18 St Andrews (Rusacks)</strong> — rooftop over the 18th green, open-flame cooking<br><strong>The Jigger Inn</strong> — legendary 19th hole pub beside the 17th fairway. Cold Tennent's and golf tales!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DAY 5: Castle Course -->
+        <div class="day-section px" id="day-5">
+          <div class="day-hero">
+            <div class="day-hero-date">Tuesday, 21 July 2026</div>
+            <div class="day-hero-title"><span style="float:right;font-size:36px">🏯</span>Castle Course + Move Hotels</div>
+          </div>
+          <div class="pill red" style="margin-bottom:16px;">TEE OFF: 9:50am</div>
+          <div class="gold-line"></div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">9:20am</div>
+                <div class="tl-title">⛳ Castle Course, St Andrews Links</div>
+                <div class="tl-desc">Perched dramatically on headlands above St Andrews Bay. Breathtaking panoramic views. The newest Links course (2008) but already a serious test. Exposed clifftop holes amplify the wind.</div>
+                <div class="tip-box">⛳ Wind assessment essential from every tee. The elevated terrain makes club selection tricky. Don't be macho — club wisely!</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">After Golf</div>
+                <div class="tl-title">🏨 Transfer to Fairmont St Andrews</div>
+                <div class="tl-desc">Pack bags the night before — smoother transfer. Check in to the 5-star clifftop resort. Excellent golf locker rooms, Kohler Waters Spa for weary muscles. 4 nights here!</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot hollow"></div>
+              <div class="tl-content">
+                <div class="tl-time">Evening</div>
+                <div class="tl-title">🍷 Dinner at Haar (Dean Banks)</div>
+                <div class="tl-desc">Award-winning chef Dean Banks. Creative, seasonal Scottish tasting menus. Exceptional. Book well in advance — this fills up fast!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DAY 6: OLD COURSE -->
+        <div class="day-section px" id="day-6">
+          <div class="day-hero">
+            <div class="day-hero-date">Wednesday, 22 July 2026</div>
+            <div class="day-hero-title"><span style="float:right;font-size:36px">🥇</span>The OLD COURSE</div>
+          </div>
+          <div class="pill gold" style="margin-bottom:4px;">TEE OFF: 1:00pm</div>
+          <div class="pill green" style="margin-bottom:16px; margin-left:8px;">THE BUCKET LIST ROUND</div>
+          <div class="gold-line"></div>
+          <div class="card" style="background:rgba(212,160,23,0.06); border-color:rgba(212,160,23,0.4); margin-bottom:16px;">
+            <div class="card-body" style="padding:14px 16px;">
+              <div style="font-family:var(--font-display); font-size:18px; color:var(--gold); margin-bottom:8px; font-weight:600;">⛳ THE OLD COURSE — 600 Years of Golf History</div>
+              <p style="font-size:13px; color:#AABCCC; line-height:1.6;">Golf has been played here since the 15th century. The Swilcan Bridge. Hell Bunker. The Road Hole. The Valley of Sin. Every golfer alive dreams of this round. Today you live the dream.</p>
+            </div>
+          </div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">Morning — Free time</div>
+                <div class="tl-title">🌅 West Sands Beach Walk</div>
+                <div class="tl-desc">Made famous in Chariots of Fire. Walk the 2km beach, look back at the town. An iconic St Andrews morning ritual before the big round.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">12:00pm — Warm Up</div>
+                <div class="tl-title">🏌️ Practice Range + R&amp;A Museum Visit</div>
+                <div class="tl-desc">Hit balls on the Himalayas putting green (public, free!) near the 1st tee. Pop into the R&amp;A World Golf Museum — 500+ years of history next to the course. Photo outside the R&amp;A Clubhouse is mandatory.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">1:00pm → ~5:30pm</div>
+                <div class="tl-title">⛳ Play the Old Course</div>
+                <div class="tl-desc"><strong>Key holes:</strong><br>14th — Hell Bunker (AVOID)<br>17th — Road Hole (survive!)<br>18th — Cross the Swilcan Bridge SLOWLY. Group photo. Every one of you.</div>
+                <div class="tip-box"><strong>Hire a caddie!</strong> Old Course caddies are legends — their local knowledge is worth every penny (£60 + tip). They know every bump, break, and story.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot hollow"></div>
+              <div class="tl-content">
+                <div class="tl-time">Evening — Celebrate!</div>
+                <div class="tl-title">🍾 Celebration Dinner</div>
+                <div class="tl-desc"><strong>Road Hole Restaurant (Old Course Hotel)</strong> — 3 AA Rosettes, overlooking the 17th hole. The ultimate post-round dinner.<br>Then: <strong>The Jigger Inn</strong> for a dram and the retelling of every shot, badly.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DAY 7: Carnoustie -->
+        <div class="day-section px" id="day-7">
+          <div class="day-hero">
+            <div class="day-hero-date">Thursday, 23 July 2026</div>
+            <div class="day-hero-title"><span style="float:right;font-size:36px">😤</span>Carnoustie Championship</div>
+          </div>
+          <div class="pill red" style="margin-bottom:16px;">TEE OFF: 11:30am · "Car-nasty"</div>
+          <div class="gold-line"></div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">11:00am — Drive 35 min</div>
+                <div class="tl-title">🚗 Head to Carnoustie, Angus</div>
+                <div class="tl-desc">Links Parade, Carnoustie DD7 7JE. Home of 8 Open Championships. The Barry Burn awaits. Arrive early to warm up — you'll need it.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">11:30am → ~4:30pm</div>
+                <div class="tl-title">⛳ Play Carnoustie Championship Course</div>
+                <div class="tl-desc">Nicknamed "Car-nasty" by the pros. The Barry Burn winds through the course. Famously ruined Jean Van de Velde's 1999 Open victory on the 18th. Ben Hogan called it "a great and difficult course." You'll agree.</div>
+                <div class="tip-box">⛳ Survival tip: STAY OUT of the Barry Burn on 17 and 18. Play conservatively. Making par on those holes is a victory.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot hollow"></div>
+              <div class="tl-content">
+                <div class="tl-time">Evening</div>
+                <div class="tl-title">🥩 Balgove Larder Steak Barn</div>
+                <div class="tl-desc">Farm-to-table on outskirts of St Andrews. Own butchery. Incredible steaks! Rustic converted barn. After Carnoustie, you deserve a great steak.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DAY 8: Dunbarnie + Drive -->
+        <div class="day-section px" id="day-8">
+          <div class="day-hero">
+            <div class="day-hero-date">Friday, 24 July 2026</div>
+            <div class="day-hero-title"><span style="float:right;font-size:36px">🏁</span>Dunbarnie + Drive South</div>
+          </div>
+          <div class="pill green" style="margin-bottom:16px;">TEE OFF: 1:50pm · Final Round!</div>
+          <div class="gold-line"></div>
+          <div class="critical-banner">
+            <div class="cb-title">⚠️ Critical Timing Today</div>
+            <p>After Dunbarnie (done ~6:30pm), have farewell dinner, then drive to Manchester tonight. Flight SQ301 departs 10:35am Saturday. Must be at MAN by 7:30am!</p>
+          </div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">Morning — Last morning in St Andrews!</div>
+                <div class="tl-title">🏰 St Andrews Cathedral &amp; Castle</div>
+                <div class="tl-desc">Hauntingly beautiful medieval ruins. Walk the Cathedral graveyard — Old Tom Morris &amp; Young Tom Morris are both buried here. A golf pilgrimage!</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">1:20pm — Drive 35 min</div>
+                <div class="tl-title">🚗 Head to Dunbarnie Links</div>
+                <div class="tl-desc">Springfield, Fife KY15 5RQ. Scotland's newest world-class course. Opened 2020, already world top 100. Pack bags BEFORE you leave — easier for departure tonight.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">1:50pm → ~6:30pm</div>
+                <div class="tl-title">⛳ Play Dunbarnie Links — The Farewell Round!</div>
+                <div class="tl-desc">Natural landforms, dramatic views to the Firth of Forth. Despite being new, plays like a classic links. The perfect send-off. Savour every shot — this is the last round of the trip!</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">~7:30pm</div>
+                <div class="tl-title">🥂 Farewell Dinner — St Andrews</div>
+                <div class="tl-desc"><strong>Adamson</strong> (South Street) — cocktails &amp; Scottish brasserie, great for groups<br><strong>Haar</strong> — if you can get a booking<br><strong>Forgans</strong> — lively, local, fun</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">~9:30pm 🔑</div>
+                <div class="tl-title">🚗 Depart Fairmont for Manchester</div>
+                <div class="tl-desc">Route: A91 → M90 → M9 → M80 → M74 → M6 → M56 → Manchester Airport.<br>Distance: ~270 miles. Drive time: ~4h 45m. Arrive ~2:15am.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot hollow"></div>
+              <div class="tl-content">
+                <div class="tl-time">~2:15am (Saturday 25 Jul)</div>
+                <div class="tl-title">🏨 Check In — Manchester Airport Hotel</div>
+                <div class="tl-desc">Radisson Blu (attached to T2), Hilton Garden Inn, or Clayton Hotel. Set alarm for 6:00am. Check-in opens for SQ301 at 7:30am.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DAY 9: Fly Home -->
+        <div class="day-section px" id="day-9">
+          <div class="day-hero">
+            <div class="day-hero-date">Saturday–Sunday, 25–26 July 2026</div>
+            <div class="day-hero-title"><span style="float:right;font-size:36px">🇸🇬</span>Fly Home!</div>
+          </div>
+          <div class="gold-line"></div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">6:00am — WAKE UP!</div>
+                <div class="tl-title">☀️ Rise and Shine!</div>
+                <div class="tl-desc">Last morning in the UK. Quick hotel breakfast. Pack up, settle any extras with the hotel. Load the car for the last time.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">7:00am</div>
+                <div class="tl-title">🚗 Return Rental Car</div>
+                <div class="tl-desc">Return to Manchester Airport Terminal 2 rental car area. Allow extra time if returning oversized golf bags — check exact return bay in advance.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">7:30am</div>
+                <div class="tl-title">✅ Check In — SQ301</div>
+                <div class="tl-desc">Singapore Airlines check-in desk, Terminal 2. Present passports, check in golf bags as oversized. Allow queue time. Use Singapore Airlines app for mobile boarding pass after baggage drop.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-time">10:35am</div>
+                <div class="tl-title">✈️ SQ301 Departs Manchester</div>
+                <div class="tl-desc">Singapore Airlines to Singapore Changi. ~13 hours. Sleep, reflect, relive the greatest golf trip of your life. Scotland will always be waiting for your return!</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot hollow"></div>
+              <div class="tl-content">
+                <div class="tl-time">Sunday ~6:30am (Singapore time)</div>
+                <div class="tl-title">🇸🇬 Arrive Singapore Changi Airport</div>
+                <div class="tl-desc">Home! Already planning the next trip to the Home of Golf… 🏴󠁧󠁢󠁳󠁣󠁴󠁿⛳</div>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin:16px 0; background:linear-gradient(135deg, rgba(27,67,50,0.6), rgba(13,33,55,0.8)); border-color:var(--border);">
+            <div class="card-body" style="padding:16px; text-align:center;">
+              <div style="font-size:32px; margin-bottom:8px;">🏴󠁧󠁢󠁳󠁣󠁴󠁿</div>
+              <div style="font-family:var(--font-display); font-size:22px; color:var(--gold); font-style:italic; margin-bottom:6px;">Haste Ye Back!</div>
+              <div style="font-size:13px; color:var(--slate); font-style:italic; line-height:1.5;">"May your drives be long, your putts be true,<br>and your whisky glass never empty!" 🥃</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- PAGE: COURSES                                    -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="page" id="page-courses">
+      <div class="page-inner px pt">
+        <div class="section-title">The Golf Lineup</div>
+        <div class="section-sub">6 legendary courses · 19–24 July</div>
+        <div class="gold-line"></div>
+
+        <div class="course-card-big animate-in">
+          <div class="course-top" style="position:relative;">
+            <div>
+              <div style="font-size:11px; color:var(--slate); margin-bottom:4px; font-family:var(--font-mono);">SUN 19 JUL · ARRIVAL DAY</div>
+              <div class="course-title">Links Golf Lesson</div>
+              <div class="course-meta">
+                <span>📍 Old Course, St Andrews</span>
+              </div>
+            </div>
+            <div class="tee-chip">Arrival Day</div>
+          </div>
+          <div class="course-body">Your initiation into true links golf! Learn the bump-and-run, playing the wind, reading seaside lies. Dinner: Tom Morris Bar &amp; Grill, Links Clubhouse.</div>
+          <div class="course-footer">💡 Key lesson: Don't fight the wind — use it.</div>
+        </div>
+
+        <div class="course-card-big animate-in" style="border-color:rgba(30,108,168,0.5); background:linear-gradient(160deg, rgba(30,108,168,0.08), var(--mist));">
+          <div class="course-top">
+            <div>
+              <div style="font-size:11px; color:var(--slate); margin-bottom:4px; font-family:var(--font-mono);">MON 20 JUL</div>
+              <div class="course-title">Kingsbarns Golf Links</div>
+              <div class="course-meta">
+                <span>📍 Kingsbarns, Fife</span>
+                <span>🏆 World Top 100</span>
+              </div>
+            </div>
+            <div class="tee-chip">10:50am</div>
+          </div>
+          <div class="course-body">Every hole overlooks the North Sea. Dramatic clifftop fairways. Spectacular par-3 3rd and par-5 12th. Modern classic that plays like it's been there for centuries. After golf: Kingsbarns Distillery next door!</div>
+          <div class="course-footer">⛳ Club down in the wind — the coastal air amplifies every shot.</div>
+        </div>
+
+        <div class="course-card-big animate-in" style="border-color:rgba(180,30,30,0.5);">
+          <div class="course-top">
+            <div>
+              <div style="font-size:11px; color:var(--slate); margin-bottom:4px; font-family:var(--font-mono);">TUE 21 JUL · MOVE TO FAIRMONT</div>
+              <div class="course-title">Castle Course</div>
+              <div class="course-meta">
+                <span>📍 St Andrews Links</span>
+                <span>Opened 2008</span>
+              </div>
+            </div>
+            <div class="tee-chip" style="background:rgba(180,30,30,0.2); color:#F08080; border-color:rgba(180,30,30,0.4);">9:50am</div>
+          </div>
+          <div class="course-body">Perched on dramatic headlands above St Andrews Bay with breathtaking panoramic views. The newest St Andrews Links course but already fearsome. Elevated exposure amplifies the wind on every hole.</div>
+          <div class="course-footer">⛳ Wind assessment essential from every tee — the elevated terrain is treacherous.</div>
+        </div>
+
+        <div class="course-card-big legendary animate-in">
+          <div class="course-top">
+            <div>
+              <div style="font-size:11px; color:var(--gold); margin-bottom:4px; font-family:var(--font-mono); font-weight:700;">WED 22 JUL · THE BIG ONE 🏆</div>
+              <div class="course-title legendary">THE OLD COURSE</div>
+              <div class="course-meta">
+                <span style="color:var(--gold);">📍 Home of Golf, St Andrews</span>
+                <span style="color:var(--gold);">600+ years of history</span>
+              </div>
+            </div>
+            <div class="tee-chip" style="background:rgba(212,160,23,0.2); color:var(--gold); border-color:var(--border);">1:00pm</div>
+          </div>
+          <div class="course-body" style="color:var(--cream);">The most famous golf course in the world. The Swilcan Bridge. Hell Bunker (14th). The Road Hole (17th) — arguably hardest par-4 in golf. The Valley of Sin (18th). Every shot you play here is on hallowed ground. Hire a caddie. Walk slowly. This is IT.</div>
+          <div class="course-footer" style="background:rgba(212,160,23,0.1); color:var(--gold);">🥇 HIRE A CADDIE — worth every penny. They know every secret of this course.</div>
+        </div>
+
+        <div class="course-card-big animate-in" style="border-color:rgba(74,0,0,0.5); background:linear-gradient(160deg, rgba(74,0,0,0.15), var(--mist));">
+          <div class="course-top">
+            <div>
+              <div style="font-size:11px; color:var(--slate); margin-bottom:4px; font-family:var(--font-mono);">THU 23 JUL · "CAR-NASTY"</div>
+              <div class="course-title" style="color:#F08080;">Carnoustie Championship</div>
+              <div class="course-meta">
+                <span>📍 Carnoustie, Angus</span>
+                <span>8× Open host</span>
+              </div>
+            </div>
+            <div class="tee-chip" style="background:rgba(74,0,0,0.3); color:#F08080; border-color:rgba(180,30,30,0.4);">11:30am</div>
+          </div>
+          <div class="course-body">One of the toughest Open Championship venues. "Brutal" is the polite word. The Barry Burn snakes through the course and devours golf balls. Jean Van de Velde's infamous 1999 meltdown happened in this very burn on the 18th. Ben Hogan called it "great and difficult." He was being generous.</div>
+          <div class="course-footer" style="color:#F08080;">😤 Barry Burn Rule: At 17 and 18, lay up. Accept bogey. Move on. Live to fight another day.</div>
+        </div>
+
+        <div class="course-card-big animate-in" style="border-color:rgba(116,198,157,0.4);">
+          <div class="course-top">
+            <div>
+              <div style="font-size:11px; color:var(--slate); margin-bottom:4px; font-family:var(--font-mono);">FRI 24 JUL · FAREWELL ROUND 🏁</div>
+              <div class="course-title">Dunbarnie Links</div>
+              <div class="course-meta">
+                <span>📍 Springfield, Fife</span>
+                <span>🏆 World Top 100 (opened 2020!)</span>
+              </div>
+            </div>
+            <div class="tee-chip">1:50pm</div>
+          </div>
+          <div class="course-body">Scotland's newest jewel. Opened 2020 and immediately ranked world top 100 — extraordinary for a new course. Natural landforms, dramatic ridges, views to the Firth of Forth. Plays like it's been there for a century. The perfect farewell round for this magnificent group.</div>
+          <div class="course-footer">🏌️ Final round — savour every shot. This one's special.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- PAGE: GUIDE (Route + Whisky + Tips)              -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="page" id="page-guide">
+      <div class="page-inner">
+
+        <!-- Drive Route -->
+        <div class="section-block px pt">
+          <div class="section-title">The Drive North</div>
+          <div class="section-sub">Manchester → Edinburgh (220 miles, ~4h 15m)</div>
+          <div class="gold-line"></div>
+          <div class="route-steps">
+            <div class="route-step">
+              <div class="route-num">1</div>
+              <div class="route-content">
+                <div class="route-title">Manchester Airport</div>
+                <div class="route-time">0 hrs · Car pickup &amp; pack up</div>
+                <div class="route-desc">Pick up large MPV (pre-booked). Load 3 bags + 3 golf bags. Fill up with fuel. Join M6 North.</div>
+              </div>
+            </div>
+            <div class="route-step">
+              <div class="route-num">2</div>
+              <div class="route-content">
+                <div class="route-title">Tebay Services ☕</div>
+                <div class="route-time">+1h 30m · M6, Cumbria</div>
+                <div class="route-desc">Best motorway services in the UK! Real farm food, award-winning pies, Lake District produce. Don't skip it — you've earned a proper lunch.</div>
+              </div>
+            </div>
+            <div class="route-step">
+              <div class="route-num">3</div>
+              <div class="route-content">
+                <div class="route-title">Gretna Green 🏴󠁧󠁢󠁳󠁣󠁴󠁿</div>
+                <div class="route-time">+2h 30m · Scotland border!</div>
+                <div class="route-desc">Photo stop at the famous Blacksmith's Shop! Famous for runaway marriages since 1754. Welcome to Scotland — the adventure begins!</div>
+              </div>
+            </div>
+            <div class="route-step">
+              <div class="route-num">4</div>
+              <div class="route-content">
+                <div class="route-title">Moffat (Optional Detour) 🏔️</div>
+                <div class="route-time">+3h · A708 scenic detour</div>
+                <div class="route-desc">Charming Victorian market town in the Southern Uplands. Black Bull Inn (since 1568). The Black Pool waterfall nearby. Worth 30 min stopover.</div>
+              </div>
+            </div>
+            <div class="route-step">
+              <div class="route-num">5</div>
+              <div class="route-content">
+                <div class="route-title">Edinburgh City Centre 🏰</div>
+                <div class="route-time">+4h 15m · Check in!</div>
+                <div class="route-desc">The Glasshouse (Marriott Autograph) for Chong Win/Kwee San/Bryan. Desmond &amp; Karen at InterContinental The George nearby.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Return Route -->
+        <div class="section-block px">
+          <div class="section-title" style="font-size:22px;">Return Route</div>
+          <div class="section-sub">St Andrews → Manchester (270 miles, ~4h 45m)</div>
+          <div class="gold-line"></div>
+          <div class="critical-banner">
+            <div class="cb-title">⚠️ Flight SQ301 — 10:35am Sat 26 Jul</div>
+            <p>Must be at Manchester T2 by <strong>7:30am</strong>. Drive Friday night after dinner. Arrive ~2:15am. Sleep at airport hotel. Leave NOTHING to chance with 3 people + golf bags!</p>
+          </div>
+          <div class="tip-box">
+            🗺️ <strong>Route:</strong> A91 → M90 → M9 → M80 → M74 → M6 → M56 → MAN Airport T2<br><br>
+            🏨 <strong>Airport Hotels (T2 walkable):</strong> Radisson Blu (attached!), Hilton Garden Inn, Clayton Hotel
+          </div>
+        </div>
+
+        <!-- Whisky Trail -->
+        <div class="section-block px">
+          <div class="section-title">The Dram Trail</div>
+          <div class="section-sub">Whisky distilleries worth the detour</div>
+          <div class="gold-line"></div>
+          
+          <div class="whisky-item">
+            <div class="whisky-name">🥃 Kingsbarns Distillery</div>
+            <div class="whisky-loc">📍 East Newhall Farm, Kingsbarns · 5 min from Kingsbarns Golf</div>
+            <div class="whisky-desc">Award-winning single malt in a beautiful Georgian farmstead. First cask 2015. Fruity, floral, exceptional. Also: Darnley's Gin Cottage next door.</div>
+            <div class="whisky-tip">💡 Tour + 3 drams £25pp. Book ahead. Open daily.</div>
+          </div>
+          
+          <div class="whisky-item">
+            <div class="whisky-name">🥃 Eden Mill Distillery</div>
+            <div class="whisky-loc">📍 Guardbridge, St Andrews · 10 min drive</div>
+            <div class="whisky-desc">Stunning new visitor centre on the Eden Estuary. The Lookout Cocktail Bar on top floor has incredible views to St Andrews. Gin + whisky experiences.</div>
+            <div class="whisky-tip">💡 Gin tour £15pp. Also has a golf simulator! Lookout Bar — book a table for sunset cocktails.</div>
+          </div>
+          
+          <div class="whisky-item">
+            <div class="whisky-name">🥃 Lindores Abbey Distillery</div>
+            <div class="whisky-loc">📍 Newburgh, Fife · 45 min from St Andrews</div>
+            <div class="whisky-desc">Scotland's FIRST written record of Scotch whisky was here in 1494! Medieval abbey ruins. A genuine pilgrimage for whisky lovers.</div>
+            <div class="whisky-tip">💡 Tours 10am, 12:30pm, 2:30pm. Book ahead. A worthy rest-day detour.</div>
+          </div>
+          
+          <div class="whisky-item">
+            <div class="whisky-name">🥃 Johnnie Walker Princes Street</div>
+            <div class="whisky-loc">📍 145 Princes Street, Edinburgh · In the city centre</div>
+            <div class="whisky-desc">World's greatest whisky experience. 8 floors, immersive, all 5 Scotch regions, rooftop bar views over Edinburgh. 3 personalised cocktails.</div>
+            <div class="whisky-tip">💡 From £35pp. Book essential — sells out. Do this on Edinburgh days (17–19 Jul).</div>
+          </div>
+        </div>
+
+        <!-- Travel Tips -->
+        <div class="section-block px pb">
+          <div class="section-title" style="font-size:22px;">Scotland Tips</div>
+          <div class="gold-line"></div>
+          <div class="tips-grid">
+            <div class="tip-card">
+              <span class="tip-card-icon">🌦️</span>
+              <div class="tip-card-title">Weather</div>
+              <ul>
+                <li>15–18°C in July</li>
+                <li>Light till 10pm!</li>
+                <li>Rain anyday — waterproofs!</li>
+                <li>Wind: the wild card</li>
+              </ul>
+            </div>
+            <div class="tip-card">
+              <span class="tip-card-icon">🚗</span>
+              <div class="tip-card-title">Driving</div>
+              <ul>
+                <li>Drive on the LEFT</li>
+                <li>70mph motorway limit</li>
+                <li>Speed cameras everywhere</li>
+                <li>Google Maps works well</li>
+              </ul>
+            </div>
+            <div class="tip-card">
+              <span class="tip-card-icon">💷</span>
+              <div class="tip-card-title">Money</div>
+              <ul>
+                <li>British Pounds (£ GBP)</li>
+                <li>Contactless everywhere</li>
+                <li>Tip 10–15% at restaurants</li>
+                <li>Caddies: ~£60 cash + tip</li>
+              </ul>
+            </div>
+            <div class="tip-card">
+              <span class="tip-card-icon">⛳</span>
+              <div class="tip-card-title">Golf</div>
+              <ul>
+                <li>Collared shirts, no denim</li>
+                <li>Soft spikes only</li>
+                <li>Caddies = local gold</li>
+                <li>4-hr pace of play target</li>
+              </ul>
+            </div>
+            <div class="tip-card">
+              <span class="tip-card-icon">📱</span>
+              <div class="tip-card-title">Connectivity</div>
+              <ul>
+                <li>UK SIM at MAN Airport</li>
+                <li>EE or Vodafone recommended</li>
+                <li>Hotel WiFi everywhere</li>
+                <li>Emergency: 999</li>
+              </ul>
+            </div>
+            <div class="tip-card">
+              <span class="tip-card-icon">🥃</span>
+              <div class="tip-card-title">Culture</div>
+              <ul>
+                <li>Haggis: try it!</li>
+                <li>"Nae bother" = no problem</li>
+                <li>Buy rounds in pubs!</li>
+                <li>Midges avoid the coast</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- PAGE: DINING                                     -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="page" id="page-dining">
+      <div class="page-inner">
+        
+        <div class="px pt pb" style="padding-bottom:0;">
+          <div class="section-title">Food, Bars & Hotels</div>
+          <div class="section-sub">The best tables &amp; stays in Scotland</div>
+        </div>
+
+        <div class="tab-switcher" id="dining-switcher">
+          <button class="tsw-btn active" data-target="d-edinburgh" onclick="switchDining('d-edinburgh', this)">🏰 Edinburgh</button>
+          <button class="tsw-btn" data-target="d-standrews" onclick="switchDining('d-standrews', this)">⛳ St Andrews</button>
+          <button class="tsw-btn" data-target="d-hotels" onclick="switchDining('d-hotels', this)">🏨 Hotels</button>
+          <button class="tsw-btn" data-target="d-perks" onclick="switchDining('d-perks', this)">💳 Perks</button>
+        </div>
+
+        <!-- Edinburgh Dining -->
+        <div class="dining-section visible" id="d-edinburgh">
+          <div class="seg-divider">Fine Dining</div>
+          <div class="card mx-2">
+            <div class="restaurant-item">
+              <div class="rest-emoji">🕯️</div>
+              <div class="rest-info">
+                <div class="rest-name">The Witchery by the Castle</div>
+                <div class="rest-type">Scottish · Gothic · Iconic</div>
+                <div class="rest-desc">Wild game, Scottish produce. Candlelit Gothic dining adjacent to Edinburgh Castle. The most atmospheric restaurant in Edinburgh.</div>
+                <div class="rest-price">£80–120pp · Book weeks ahead</div>
+              </div>
+            </div>
+            <div class="restaurant-item">
+              <div class="rest-emoji">⭐</div>
+              <div class="rest-info">
+                <div class="rest-name">Lyla (Stuart Ralston)</div>
+                <div class="rest-type">Michelin Star · Seafood Tasting Menu</div>
+                <div class="rest-desc">10-course Scottish seafood tasting menu in a stunning Royal Terrace townhouse. Book months ahead. The pinnacle of Edinburgh dining.</div>
+                <div class="rest-price">£185pp · Essential booking</div>
+              </div>
+            </div>
+            <div class="restaurant-item">
+              <div class="rest-emoji">🏛️</div>
+              <div class="rest-info">
+                <div class="rest-name">The Spence (Gleneagles Townhouse)</div>
+                <div class="rest-type">Scottish Fine Dining · Cocktails Award</div>
+                <div class="rest-desc">Victorian banking hall transformed. Michelin Exceptional Cocktails award. Grand, theatrical, exceptional. 39 St Andrew Square.</div>
+                <div class="rest-price">£60–90pp</div>
+              </div>
+            </div>
+          </div>
+          <div class="seg-divider">Seafood & Casual</div>
+          <div class="card">
+            <div class="restaurant-item">
+              <div class="rest-emoji">🦞</div>
+              <div class="rest-info">
+                <div class="rest-name">Ondine Oyster & Grill</div>
+                <div class="rest-type">Scottish Seafood</div>
+                <div class="rest-desc">Near the Royal Mile. Day-boat seafood. Langoustines, oysters, scallops. Sustainably sourced. The real taste of Scotland's seas.</div>
+                <div class="rest-price">£50–70pp</div>
+              </div>
+            </div>
+            <div class="restaurant-item">
+              <div class="rest-emoji">🌟</div>
+              <div class="rest-info">
+                <div class="rest-name">Noto (Michelin Bib Gourmand)</div>
+                <div class="rest-type">Asian-Scottish Fusion</div>
+                <div class="rest-desc">Creative pan-Asian-inspired Scottish ingredients. North Sea crab exceptional. Arbroath smokie croquettes. Fun, inventive, outstanding value.</div>
+                <div class="rest-price">£35–55pp</div>
+              </div>
+            </div>
+            <div class="restaurant-item">
+              <div class="rest-emoji">🕌</div>
+              <div class="rest-info">
+                <div class="rest-name">Baba</div>
+                <div class="rest-type">Levantine Mezze · Groups</div>
+                <div class="rest-desc">Bold spices, sharing plates, smoky flavours. Lamb shawarma, hummus, charred aubergine. Perfect for the group — lively and fun!</div>
+                <div class="rest-price">£30–50pp</div>
+              </div>
+            </div>
+            <div class="restaurant-item">
+              <div class="rest-emoji">🏦</div>
+              <div class="rest-info">
+                <div class="rest-name">The Dome (Grill Room)</div>
+                <div class="rest-type">Grand Victorian Dining</div>
+                <div class="rest-desc">Former Commercial Bank of Scotland (1844). Stunning Victorian interior. Great for the group. Scottish grill classics in a dramatic space.</div>
+                <div class="rest-price">£40–65pp</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- St Andrews Dining -->
+        <div class="dining-section" id="d-standrews">
+          <div class="seg-divider">Fine Dining</div>
+          <div class="card">
+            <div class="restaurant-item">
+              <div class="rest-emoji">🌊</div>
+              <div class="rest-info">
+                <div class="rest-name">Haar (Dean Banks)</div>
+                <div class="rest-type">Award-winning Scottish</div>
+                <div class="rest-desc">Creative, seasonal tasting menus by acclaimed chef Dean Banks. Outstanding use of local ingredients. Book well ahead — it fills fast.</div>
+                <div class="rest-price">£65–90pp</div>
+              </div>
+            </div>
+            <div class="restaurant-item">
+              <div class="rest-emoji">🌅</div>
+              <div class="rest-info">
+                <div class="rest-name">18 St Andrews (Rusacks Hotel)</div>
+                <div class="rest-type">Rooftop · Views Over 18th Green</div>
+                <div class="rest-desc">Rooftop restaurant with unrivalled views over the Old Course 18th green. Open-flame Scottish cooking. One of the great settings in world golf dining.</div>
+                <div class="rest-price">£55–75pp</div>
+              </div>
+            </div>
+          </div>
+          <div class="seg-divider">Casual & Pubs</div>
+          <div class="card">
+            <div class="restaurant-item">
+              <div class="rest-emoji">⛳</div>
+              <div class="rest-info">
+                <div class="rest-name">Tom Morris Bar & Grill</div>
+                <div class="rest-type">Links Clubhouse · Dinner 19 Jul</div>
+                <div class="rest-desc">Views over the 18th fairway. Named after the golf legend. Great Scottish menu, excellent whisky. The official welcome-to-St-Andrews dinner!</div>
+                <div class="rest-price">£40–60pp</div>
+              </div>
+            </div>
+            <div class="restaurant-item">
+              <div class="rest-emoji">🍺</div>
+              <div class="rest-info">
+                <div class="rest-name">The Jigger Inn</div>
+                <div class="rest-type">Legendary Golf Pub · 19th Hole</div>
+                <div class="rest-desc">19th-century station master's lodge beside the 17th fairway of the Old Course. Fires, ales, golf tales. THE 19th hole in world golf. Non-negotiable.</div>
+                <div class="rest-price">£15–30pp pub food</div>
+              </div>
+            </div>
+            <div class="restaurant-item">
+              <div class="rest-emoji">🎸</div>
+              <div class="rest-info">
+                <div class="rest-name">Forgans</div>
+                <div class="rest-type">Scottish Brasserie · Groups</div>
+                <div class="rest-desc">130 Market Street. Old golf-club factory building. Lively, fun, great Scottish menu. Local institution. Perfect for the big group nights!</div>
+                <div class="rest-price">£25–45pp</div>
+              </div>
+            </div>
+            <div class="restaurant-item">
+              <div class="rest-emoji">🐟</div>
+              <div class="rest-info">
+                <div class="rest-name">Tailend</div>
+                <div class="rest-type">Fish & Chips · Award-winning</div>
+                <div class="rest-desc">Market Street. Award-winning fish and chips. Classic, proper, brilliant. The post-round lunch of champions.</div>
+                <div class="rest-price">£12–20pp</div>
+              </div>
+            </div>
+            <div class="restaurant-item">
+              <div class="rest-emoji">🥩</div>
+              <div class="rest-info">
+                <div class="rest-name">Balgove Larder Steak Barn</div>
+                <div class="rest-type">Farm-to-Table · Steaks</div>
+                <div class="rest-desc">Own farm butchery. Incredible steaks in a rustic barn. Seasonal, local, outstanding. Perfect after Carnoustie — you deserve red meat.</div>
+                <div class="rest-price">£35–55pp</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hotels -->
+        <div class="dining-section" id="d-hotels">
+          <div class="seg-divider">Edinburgh</div>
+          <div class="card">
+            <div class="restaurant-item">
+              <div class="rest-emoji">🌿</div>
+              <div class="rest-info">
+                <div class="rest-name">The Glasshouse, Autograph Collection</div>
+                <div class="rest-type">Marriott ★★★★★ · Titanium Perks Apply</div>
+                <div class="rest-desc">172-year-old listed building with ultra-modern interior. Suites named after whisky regions. 160+ single malts at Snug Bar. Calton Hill views. USE YOUR TITANIUM BENEFITS!</div>
+                <div class="rest-price">2 Greenside Place, Edinburgh EH1 3AA</div>
+              </div>
+            </div>
+            <div class="restaurant-item">
+              <div class="rest-emoji">🏰</div>
+              <div class="rest-info">
+                <div class="rest-name">InterContinental Edinburgh The George</div>
+                <div class="rest-type">★★★★★ · Desmond & Karen's hotel</div>
+                <div class="rest-desc">Historic 5-star since 1775 on George Street, New Town. Elegant, grand, impeccably Scottish. Chong Win's party can join them here if preferred.</div>
+                <div class="rest-price">19-21 George Street, Edinburgh EH2 2PB</div>
+              </div>
+            </div>
+            <div class="restaurant-item">
+              <div class="rest-emoji">⚡</div>
+              <div class="rest-info">
+                <div class="rest-name">W Edinburgh</div>
+                <div class="rest-type">Marriott ★★★★★ · Most Contemporary</div>
+                <div class="rest-desc">St James Square. Buzzing, modern, design-forward. The rooftop bar is spectacular. Great for the younger energy of the group!</div>
+                <div class="rest-price">St James Square, Edinburgh EH1 3AE</div>
+              </div>
+            </div>
+          </div>
+          <div class="seg-divider">St Andrews</div>
+          <div class="card">
+            <div class="restaurant-item">
+              <div class="rest-emoji">🏌️</div>
+              <div class="rest-info">
+                <div class="rest-name">Old Course Hotel</div>
+                <div class="rest-type">★★★★★ · 19–21 July</div>
+                <div class="rest-desc">Iconic hotel beside the 17th Road Hole. Road Hole Restaurant (3 AA Rosettes). Swilcan Spa. The Jigger Inn. Request a links-view room!</div>
+                <div class="rest-price">Old Station Road, St Andrews KY16 9SP</div>
+              </div>
+            </div>
+            <div class="restaurant-item">
+              <div class="rest-emoji">🌊</div>
+              <div class="rest-info">
+                <div class="rest-name">Fairmont St Andrews</div>
+                <div class="rest-type">★★★★★ · 21–25 July (4 nights)</div>
+                <div class="rest-desc">Clifftop resort with panoramic North Sea views. Own 2 championship courses. La Cucina, The Squire, Spirits of Scotland bar. Kohler Waters Spa. Use Amex FHR for the £100 credit!</div>
+                <div class="rest-price">St Andrews KY16 8PN</div>
+              </div>
+            </div>
+          </div>
+          <div class="seg-divider">Manchester Return Night</div>
+          <div class="card">
+            <div class="restaurant-item">
+              <div class="rest-emoji">✈️</div>
+              <div class="rest-info">
+                <div class="rest-name">Radisson Blu Manchester Airport</div>
+                <div class="rest-type">★★★★ · Attached to Terminal 2</div>
+                <div class="rest-desc">Walk directly to T2 check-in. Perfect for the pre-flight night. Book well ahead — fills fast on Saturdays.</div>
+                <div class="rest-price">Terminal 2, Manchester Airport M90 3RA</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Perks -->
+        <div class="dining-section pb" id="d-perks">
+          <div class="seg-divider">Marriott Bonvoy Titanium Elite</div>
+          <div class="card">
+            <div class="perk-item">
+              <div class="perk-check gold">⬆️</div>
+              <div><div class="perk-title">Suite Upgrades</div><div class="perk-desc">Request at check-in — available when inventory allows. Ask at The Glasshouse and Fairmont!</div></div>
+            </div>
+            <div class="perk-item">
+              <div class="perk-check gold">🕓</div>
+              <div><div class="perk-title">Late Check-Out (4pm)</div><div class="perk-desc">Huge on golf trips — shower after your round! Confirm at check-in.</div></div>
+            </div>
+            <div class="perk-item">
+              <div class="perk-check gold">🥂</div>
+              <div><div class="perk-title">Club Lounge Access</div><div class="perk-desc">Complimentary food &amp; drinks at select properties. Confirm availability when booking.</div></div>
+            </div>
+            <div class="perk-item">
+              <div class="perk-check gold">☀️</div>
+              <div><div class="perk-title">Free Breakfast (select properties)</div><div class="perk-desc">Confirm at booking — not all Marriott properties include this for Titanium.</div></div>
+            </div>
+            <div class="perk-item">
+              <div class="perk-check gold">⭐</div>
+              <div><div class="perk-title">17 Points per £1</div><div class="perk-desc">75% elite bonus on all stays. This trip earns serious Bonvoy points!</div></div>
+            </div>
+          </div>
+          <div class="seg-divider">Amex Platinum — FHR & Hotel Collection</div>
+          <div class="card">
+            <div class="perk-item">
+              <div class="perk-check blue">🍳</div>
+              <div><div class="perk-title">Daily Breakfast for 2</div><div class="perk-desc">Complimentary at Fine Hotels &amp; Resorts properties. Book via AmexTravel.com!</div></div>
+            </div>
+            <div class="perk-item">
+              <div class="perk-check blue">💰</div>
+              <div><div class="perk-title">$100 / £75 Property Credit</div><div class="perk-desc">Spend on dining, spa, or golf at participating FHR properties. Fairmont qualifies!</div></div>
+            </div>
+            <div class="perk-item">
+              <div class="perk-check blue">⬆️</div>
+              <div><div class="perk-title">Room Upgrade on Arrival</div><div class="perk-desc">When available. Combined with Marriott Titanium = excellent upgrade chances!</div></div>
+            </div>
+            <div class="perk-item">
+              <div class="perk-check blue">🕓</div>
+              <div><div class="perk-title">Late Check-Out 4pm + Early Check-In</div><div class="perk-desc">Both subject to availability. Mention both Amex Plat AND Marriott Titanium status!</div></div>
+            </div>
+            <div class="perk-item">
+              <div class="perk-check blue">🎁</div>
+              <div><div class="perk-title">Welcome Amenity</div><div class="perk-desc">Special gift on arrival at FHR properties. Often chocolates, local produce, or a dram!</div></div>
+            </div>
+          </div>
+          <div class="tip-box px" style="margin:12px 16px 8px;">
+            💡 <strong>Pro tip:</strong> Call the hotel BEFORE arrival and mention BOTH Marriott Titanium Elite AND Amex Platinum. Stack the benefits: suite upgrade + breakfast + property credit + late checkout = an outstanding 5-star stay for dramatically better value.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /pages -->
+
+  <!-- TAB BAR -->
+  <div id="tabbar">
+    <button class="tab active" data-page="home" onclick="switchPage('home')">
+      <span class="tab-icon">🏠</span>
+      <span class="tab-label">Home</span>
+    </button>
+    <button class="tab" data-page="itinerary" onclick="switchPage('itinerary')">
+      <span class="tab-icon">📅</span>
+      <span class="tab-label">Itinerary</span>
+    </button>
+    <button class="tab" data-page="courses" onclick="switchPage('courses')">
+      <span class="tab-icon">⛳</span>
+      <span class="tab-label">Courses</span>
+    </button>
+    <button class="tab" data-page="guide" onclick="switchPage('guide')">
+      <span class="tab-icon">🗺️</span>
+      <span class="tab-label">Guide</span>
+    </button>
+    <button class="tab" data-page="dining" onclick="switchPage('dining')">
+      <span class="tab-icon">🍷</span>
+      <span class="tab-label">Dining</span>
+    </button>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+// ─── NAVIGATION ──────────────────────────────────────
+function switchPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  
+  const page = document.getElementById('page-' + pageId);
+  const tab = document.querySelector(`.tab[data-page="${pageId}"]`);
+  
+  if (page) page.classList.add('active');
+  if (tab) tab.classList.add('active');
+  
+  // Scroll page to top
+  if (page) page.scrollTop = 0;
+}
+
+// ─── DAY SWITCHER ─────────────────────────────────────
+function switchDay(dayIndex) {
+  document.querySelectorAll('.day-chip').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.day-section').forEach(s => s.classList.remove('visible'));
+  
+  const chip = document.querySelector(`.day-chip[data-day="${dayIndex}"]`);
+  const section = document.getElementById('day-' + dayIndex);
+  
+  if (chip) {
+    chip.classList.add('active');
+    chip.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+  if (section) section.classList.add('visible');
+}
+
+// ─── DINING SWITCHER ──────────────────────────────────
+function switchDining(targetId, btn) {
+  document.querySelectorAll('.dining-section').forEach(s => s.classList.remove('visible'));
+  document.querySelectorAll('.tsw-btn').forEach(b => b.classList.remove('active'));
+  
+  const target = document.getElementById(targetId);
+  if (target) target.classList.add('visible');
+  if (btn) btn.classList.add('active');
+}
+
+// ─── COUNTDOWN ────────────────────────────────────────
+function updateCountdown() {
+  const tripDate = new Date('2026-07-17T02:10:00+08:00'); // Singapore time departure
+  const now = new Date();
+  const diff = tripDate - now;
+  
+  const el = document.getElementById('countdown-num');
+  const sub = document.getElementById('countdown-sub');
+  
+  if (diff <= 0) {
+    el.textContent = '🏌️';
+    sub.textContent = "You're on the trip! Enjoy!";
+    return;
+  }
+  
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  
+  if (days > 0) {
+    el.textContent = days;
+    sub.textContent = `day${days !== 1 ? 's' : ''} until SQ302 departs! ⛳`;
+  } else {
+    el.textContent = hours;
+    sub.textContent = `hours until departure! Get to Changi!`;
+  }
+}
+
+// ─── SERVICE WORKER ───────────────────────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').then(reg => {
+      console.log('SW registered:', reg.scope);
+    }).catch(err => {
+      console.log('SW failed:', err);
+    });
+  });
+}
+
+// ─── URL PARAM HANDLING ───────────────────────────────
+function handleUrlParams() {
+  const params = new URLSearchParams(window.location.search);
+  const view = params.get('view');
+  if (view === 'courses') switchPage('courses');
+  else if (view === 'today') {
+    switchPage('itinerary');
+    // Find today's day
+    const today = new Date();
+    const days = [
+      new Date('2026-07-17'), new Date('2026-07-17'), new Date('2026-07-18'),
+      new Date('2026-07-19'), new Date('2026-07-20'), new Date('2026-07-21'),
+      new Date('2026-07-22'), new Date('2026-07-23'), new Date('2026-07-24'),
+      new Date('2026-07-25')
+    ];
+    const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    for (let i = 0; i < days.length; i++) {
+      const d = new Date(days[i].getFullYear(), days[i].getMonth(), days[i].getDate());
+      if (todayDate.getTime() === d.getTime()) { switchDay(i); break; }
+    }
+  }
+}
+
+// ─── INIT ─────────────────────────────────────────────
+updateCountdown();
+setInterval(updateCountdown, 60000); // update every minute
+handleUrlParams();
+</script>
+</body>
+</html>
